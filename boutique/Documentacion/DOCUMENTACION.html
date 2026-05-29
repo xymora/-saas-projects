@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentación — Mi Boutique POS</title>
+<style>
+  :root {
+    --brand:      #c8956c;
+    --brand-dark: #a8754c;
+    --brand-light:#fdf8f4;
+    --dark:       #1a1a2e;
+    --gray-900:   #111827;
+    --gray-700:   #374151;
+    --gray-500:   #6b7280;
+    --gray-200:   #e5e7eb;
+    --gray-100:   #f3f4f6;
+    --success:    #10b981;
+    --danger:     #ef4444;
+    --warning:    #f59e0b;
+    --info:       #3b82f6;
+    --white:      #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-900);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ── Sidebar ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--dark);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    padding-bottom: 24px;
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    margin-bottom: 12px;
+  }
+  .sidebar-logo .brand { font-size: 22px; font-weight: 800; color: var(--brand); letter-spacing: .5px; }
+  .sidebar-logo .sub   { font-size: 11px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: 2px; margin-top: 2px; }
+
+  .sidebar-section { padding: 6px 16px 4px; font-size: 10px; font-weight: 700;
+    color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 8px; }
+
+  .sidebar a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px; color: rgba(255,255,255,.6); text-decoration: none;
+    font-size: 13px; font-weight: 500; border-radius: 0; transition: all .15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar a:hover { color: var(--white); background: rgba(255,255,255,.05); }
+  .sidebar a.active { color: var(--brand); border-left-color: var(--brand); background: rgba(200,149,108,.08); }
+  .sidebar a .ico { font-size: 15px; width: 20px; text-align: center; }
+
+  /* ── Main content ── */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 960px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, #2d1b69 60%, #1a1a2e 100%);
+    border-radius: 16px;
+    padding: 48px 40px;
+    margin-bottom: 40px;
+    color: var(--white);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(200,149,108,.2); color: var(--brand);
+    border: 1px solid rgba(200,149,108,.3);
+    padding: 4px 12px; border-radius: 99px;
+    font-size: 12px; font-weight: 600; margin-bottom: 20px;
+  }
+  .hero h1 { font-size: 34px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 10px; }
+  .hero p  { font-size: 15px; color: rgba(255,255,255,.6); max-width: 560px; }
+
+  /* ── Section ── */
+  .doc-section {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 1px 12px rgba(0,0,0,.06);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .doc-section-header {
+    padding: 20px 28px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .doc-section-header .sec-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .doc-section-header h2 { font-size: 18px; font-weight: 700; }
+  .doc-section-header p  { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+  .doc-section-body { padding: 24px 28px; }
+
+  /* ── Part header (Sistema / App) ── */
+  .part-header {
+    display: flex; align-items: center; gap: 12px;
+    margin: 48px 0 24px;
+  }
+  .part-header:first-of-type { margin-top: 0; }
+  .part-divider { flex: 1; height: 1px; background: var(--gray-200); }
+  .part-label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--gray-500); white-space: nowrap;
+    padding: 0 4px;
+  }
+
+  /* ── Module card ── */
+  .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  .module-card {
+    border: 1.5px solid var(--gray-200); border-radius: 10px; padding: 16px;
+  }
+  .module-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .module-card-ico  { font-size: 20px; }
+  .module-card-name { font-size: 14px; font-weight: 700; }
+  .module-card-role { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px;
+    background: var(--gray-100); color: var(--gray-500); margin-left: auto; }
+  .module-card p { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+
+  /* ── Flow steps ── */
+  .flow { display: flex; flex-direction: column; gap: 0; margin-top: 4px; }
+  .flow-step {
+    display: flex; gap: 16px; position: relative;
+  }
+  .flow-step:not(:last-child)::before {
+    content: ''; position: absolute; left: 19px; top: 40px;
+    width: 2px; height: calc(100% - 8px);
+    background: var(--gray-200);
+  }
+  .flow-num {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--brand-light); color: var(--brand-dark);
+    font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-bottom: 20px; z-index: 1;
+    border: 2px solid var(--brand);
+  }
+  .flow-body { padding-top: 6px; padding-bottom: 16px; }
+  .flow-body strong { display: block; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .flow-body p { font-size: 13px; color: var(--gray-700); }
+
+  /* ── Tabs visual ── */
+  .tab-visual {
+    display: flex; border-radius: 10px; overflow: hidden;
+    border: 1.5px solid var(--gray-200); margin: 12px 0;
+  }
+  .tab-item {
+    flex: 1; padding: 12px 8px; text-align: center;
+    font-size: 12px; font-weight: 600; color: var(--gray-500);
+    background: var(--gray-100); border-right: 1px solid var(--gray-200);
+  }
+  .tab-item:last-child { border-right: none; }
+  .tab-item.active { background: var(--white); color: var(--brand); box-shadow: inset 0 -3px 0 var(--brand); }
+  .tab-item .t-ico { font-size: 20px; display: block; margin-bottom: 3px; }
+
+  /* ── Table ── */
+  .doc-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+  .doc-table th { background: var(--gray-100); padding: 10px 14px; text-align: left;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+    color: var(--gray-500); border-bottom: 1.5px solid var(--gray-200); }
+  .doc-table td { padding: 11px 14px; border-bottom: 1px solid var(--gray-200); color: var(--gray-700); }
+  .doc-table tr:last-child td { border-bottom: none; }
+  .doc-table tr:hover td { background: var(--gray-100); }
+
+  /* ── Badges / pills ── */
+  .pill {
+    display: inline-flex; align-items: center; padding: 2px 10px;
+    border-radius: 99px; font-size: 11px; font-weight: 700;
+  }
+  .pill-green  { background: #d1fae5; color: #065f46; }
+  .pill-yellow { background: #fef3c7; color: #92400e; }
+  .pill-red    { background: #fee2e2; color: #991b1b; }
+  .pill-blue   { background: #dbeafe; color: #1e40af; }
+  .pill-gray   { background: var(--gray-100); color: var(--gray-700); }
+  .pill-brand  { background: #f3e5d8; color: var(--brand-dark); }
+
+  /* ── Alert box ── */
+  .alert-box {
+    border-radius: 10px; padding: 14px 16px;
+    font-size: 13px; line-height: 1.5;
+    display: flex; gap: 10px; align-items: flex-start;
+    margin: 12px 0;
+  }
+  .alert-box .a-ico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-info    { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+  .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+  .alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #065f46; }
+
+  /* ── Code ── */
+  .code-block {
+    background: var(--dark); color: #e2e8f0;
+    border-radius: 10px; padding: 16px 20px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px; line-height: 1.7;
+    overflow-x: auto; margin: 10px 0;
+  }
+  .code-block .kw   { color: #c084fc; }
+  .code-block .str  { color: #86efac; }
+  .code-block .cmt  { color: #64748b; }
+  .code-block .fn   { color: #67e8f9; }
+
+  /* ── Comparison ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .compare-card { border-radius: 10px; padding: 18px; border: 1.5px solid var(--gray-200); }
+  .compare-card.is-web { border-color: #bfdbfe; background: #eff6ff; }
+  .compare-card.is-app { border-color: #d8b4fe; background: #faf5ff; }
+  .compare-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .compare-card ul { list-style: none; }
+  .compare-card ul li { font-size: 13px; color: var(--gray-700); padding: 4px 0;
+    border-bottom: 1px solid rgba(0,0,0,.06); display: flex; gap: 8px; }
+  .compare-card ul li:last-child { border-bottom: none; }
+  .compare-card ul li::before { content: '→'; color: var(--brand); font-weight: 700; flex-shrink: 0; }
+
+  /* ── API list ── */
+  .api-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .api-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 8px; background: var(--gray-100);
+  }
+  .api-file { font-family: monospace; font-size: 13px; font-weight: 700; color: var(--brand-dark); flex-shrink: 0; }
+  .api-desc { font-size: 13px; color: var(--gray-700); }
+
+  /* ── Status states ── */
+  .states-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .state-card {
+    border-radius: 8px; padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .state-card .s-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .state-card .s-info strong { display: block; font-size: 13px; font-weight: 700; }
+  .state-card .s-info span  { font-size: 12px; color: var(--gray-500); }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 24px 20px; }
+    .module-grid, .compare-grid, .states-grid { grid-template-columns: 1fr; }
+  }
+
+  h3 { font-size: 16px; font-weight: 700; margin: 20px 0 10px; color: var(--gray-900); }
+  h3:first-child { margin-top: 0; }
+  p  { color: var(--gray-700); margin-bottom: 10px; }
+  ul, ol { padding-left: 18px; color: var(--gray-700); font-size: 14px; }
+  li { margin-bottom: 5px; }
+  strong { color: var(--gray-900); }
+  hr { border: none; border-top: 1px solid var(--gray-200); margin: 20px 0; }
+
+  .highlight { color: var(--brand); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Mi Boutique</div>
+    <div class="sub">Documentación</div>
+  </div>
+
+  <div class="sidebar-section">Sistema Completo</div>
+  <a href="#overview" class="ico">📋</span> Descripción general</a>
+  <a href="#roles"><span class="ico">👥</span> Roles de usuario</a>
+  <a href="#modulos"><span class="ico">🧩</span> Módulos</a>
+  <a href="#pos-web"><span class="ico">🛒</span> Punto de Venta</a>
+  <a href="#apartados-web"><span class="ico">📦</span> Apartados</a>
+  <a href="#api"><span class="ico">⚙️</span> API interna</a>
+  <a href="#db"><span class="ico">🗄️</span> Base de datos</a>
+
+  <div class="sidebar-section">Aplicación Android</div>
+  <a href="#app-overview"><span class="ico">📱</span> ¿Qué es la app?</a>
+  <a href="#app-arquitectura"><span class="ico">🏗️</span> Arquitectura</a>
+  <a href="#app-login"><span class="ico">🔑</span> Login</a>
+  <a href="#app-buscar"><span class="ico">🔍</span> Pestaña Buscar</a>
+  <a href="#app-carrito"><span class="ico">🛒</span> Pestaña Carrito</a>
+  <a href="#app-apartados"><span class="ico">📦</span> Pestaña Apartados</a>
+  <a href="#app-vs-web"><span class="ico">↔️</span> App vs Sistema web</a>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main class="main">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">👗 Documentación técnica v1.0</div>
+    <h1>Mi Boutique POS</h1>
+    <p>Guía completa del sistema web de administración y de la aplicación Android híbrida. Incluye módulos, flujos de trabajo, apartados, API y base de datos.</p>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       PARTE 1 — SISTEMA COMPLETO
+  ───────────────────────────────────────────── -->
+  <div class="part-header">
+    <div class="part-label">Parte 1 — Sistema completo (Web)</div>
+    <div class="part-divider"></div>
+  </div>
+
+  <!-- Descripción general -->
+  <div class="doc-section" id="overview">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#eff6ff">💻</div>
+      <div>
+        <h2>Descripción general</h2>
+        <p>Panel de administración web — <code>pos.php</code> y vistas relacionadas</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <p>El sistema completo es un panel web accesible desde cualquier navegador de escritorio o móvil. Está diseñado para el personal con acceso a computadora y para los dueños que necesitan gestionar todo el negocio.</p>
+      <div class="alert-box alert-info">
+        <span class="a-ico">🌐</span>
+        <span>URL: <strong>https://tu-dominio.com/mi-boutique/</strong><br>
+        El archivo principal del POS de escritorio es <strong>views/pos.php</strong>. La interfaz usa un layout de sidebar + contenido principal.</span>
+      </div>
+      <p>Cualquier cambio en los archivos del servidor (vistas, API, lógica) se refleja de inmediato en todos los usuarios conectados, tanto en el sistema web como en la app.</p>
+    </div>
+  </div>
+
+  <!-- Roles -->
+  <div class="doc-section" id="roles">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#faf5ff">👥</div>
+      <div>
+        <h2>Roles de usuario</h2>
+        <p>Tres niveles de acceso controlados por sesión PHP</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Rol</th>
+            <th>Acceso</th>
+            <th>Puede usar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-red">admin</span></td>
+            <td>Total sin restricciones</td>
+            <td>Dashboard, POS, Inventario, Etiquetas, Reportes, Promociones, <strong>Usuarios</strong>, Configuración</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-brand">dueño</span></td>
+            <td>Gestión completa excepto usuarios</td>
+            <td>Dashboard, POS, Inventario, Etiquetas, Reportes, Promociones, Configuración</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-gray">empleado</span></td>
+            <td>Solo operación de tienda</td>
+            <td>POS (ventas y apartados), Inventario, Etiquetas QR</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Módulos -->
+  <div class="doc-section" id="modulos">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#f0fdf4">🧩</div>
+      <div>
+        <h2>Módulos del sistema</h2>
+        <p>Cada módulo tiene su propia vista y su propio archivo de API</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="module-grid">
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">📊</span>
+            <span class="module-card-name">Dashboard</span>
+            <span class="module-card-role">admin / dueño</span>
+          </div>
+          <p>Resumen del día y del mes: ventas por método de pago, productos con stock bajo y últimas transacciones.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">🛒</span>
+            <span class="module-card-name">Punto de Venta</span>
+            <span class="module-card-role">todos</span>
+          </div>
+          <p>Búsqueda de productos, carrito, cobro en efectivo o Clip, y registro de apartados.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">📦</span>
+            <span class="module-card-name">Inventario</span>
+            <span class="module-card-role">todos</span>
+          </div>
+          <p>Catálogo completo con SKU, stock, precios y costos. Altas, ediciones y ajustes manuales de stock con historial.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">🏷️</span>
+            <span class="module-card-name">Etiquetas QR</span>
+            <span class="module-card-role">todos</span>
+          </div>
+          <p>Genera e imprime etiquetas con código QR para uno o varios productos. El QR contiene el SKU del artículo.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">📈</span>
+            <span class="module-card-name">Reportes</span>
+            <span class="module-card-role">admin / dueño</span>
+          </div>
+          <p>Ventas por rango de fechas, detalle de cada transacción, reenvío de tickets por correo y cancelación de ventas.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">🎁</span>
+            <span class="module-card-name">Promociones</span>
+            <span class="module-card-role">admin / dueño</span>
+          </div>
+          <p>Descuentos por porcentaje o monto fijo con venta mínima y rango de fechas. Se activan automáticamente en el POS.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">👤</span>
+            <span class="module-card-name">Usuarios</span>
+            <span class="module-card-role">admin</span>
+          </div>
+          <p>Altas, edición de datos, cambio de contraseña y activar/desactivar acceso sin borrar el registro.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-card-head">
+            <span class="module-card-ico">⚙️</span>
+            <span class="module-card-name">Configuración</span>
+            <span class="module-card-role">admin / dueño</span>
+          </div>
+          <p>Nombre del negocio, dirección, correo, leyenda del ticket y parámetros de logo para impresión.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- POS web -->
+  <div class="doc-section" id="pos-web">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#fefce8">🛒</div>
+      <div>
+        <h2>Punto de Venta — Flujo completo</h2>
+        <p>Layout de dos columnas: búsqueda a la izquierda, carrito a la derecha</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+
+      <h3>1. Buscar producto</h3>
+      <ul>
+        <li>Campo de texto: SKU exacto o cualquier parte del nombre, marca, color o talla.</li>
+        <li>Si el SKU coincide exactamente → muestra la tarjeta del producto directo.</li>
+        <li>Si no → lista de resultados; clic en uno lo selecciona.</li>
+        <li>Botón <strong>"Cámara QR"</strong> abre la cámara web para escanear el código del producto.</li>
+        <li>Selector de promoción activa si hay alguna configurada y vigente.</li>
+      </ul>
+
+      <h3>2. Carrito</h3>
+      <ul>
+        <li>Botones <strong>+</strong> / <strong>−</strong> para ajustar cantidades (respeta el stock).</li>
+        <li>Botón <strong>✕</strong> para quitar un artículo.</li>
+        <li>Resumen automático: Subtotal / Descuento / <strong>TOTAL</strong>.</li>
+      </ul>
+
+      <h3>3. Opciones de cobro</h3>
+      <table class="doc-table">
+        <thead><tr><th>Método</th><th>Datos que pide</th><th>Resultado</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>💵 <strong>Efectivo</strong></td>
+            <td>Correo del cliente (opcional para ticket)</td>
+            <td>Registra venta, descuenta stock, genera folio</td>
+          </tr>
+          <tr>
+            <td>💳 <strong>Clip</strong></td>
+            <td>Folio del voucher de la terminal (obligatorio) + correo (opcional)</td>
+            <td>Igual que efectivo + guarda folio Clip y comisión 3.6%+IVA</td>
+          </tr>
+          <tr>
+            <td>📦 <strong>Apartar</strong></td>
+            <td>Nombre, anticipo, vigencia (ver sección Apartados)</td>
+            <td>Guarda apartado, limpia carrito, no descuenta stock</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- Apartados web -->
+  <div class="doc-section" id="apartados-web">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#fffbeb">📦</div>
+      <div>
+        <h2>Apartados</h2>
+        <p>Reserva de prendas con anticipo — compartido entre sistema web y app</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+
+      <div class="alert-box alert-warning">
+        <span class="a-ico">⚠️</span>
+        <span>Los apartados <strong>no descuentan stock automáticamente</strong>. La prenda debe separarse físicamente en tienda. Cuando la clienta regresa y liquida, la venta final sí descuenta el stock al procesarla por el POS.</span>
+      </div>
+
+      <h3>Flujo para crear un apartado</h3>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-body">
+            <strong>Agregar prendas al carrito</strong>
+            <p>Igual que una venta normal. Se pueden apartar una o varias prendas al mismo tiempo.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-body">
+            <strong>Tocar "📦 Apartar prendas"</strong>
+            <p>Botón amarillo en el carrito, debajo de "Cobrar con Clip". Abre el modal de apartado.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-body">
+            <strong>Llenar los datos</strong>
+            <p>Nombre de la clienta (obligatorio) · Teléfono (opcional) · Monto del anticipo que paga hoy · Vigencia en días (default 30) · Notas. El modal calcula en tiempo real: Total / Anticipo / Resta por pagar.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-body">
+            <strong>Confirmar y separar la prenda</strong>
+            <p>Se genera un folio <code>APT-XXXXXX</code>, el carrito se limpia y la prenda se separa físicamente en tienda.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-body">
+            <strong>Cuando la clienta regresa</strong>
+            <p>Procesar el pago del saldo como venta normal (efectivo o Clip). Luego abrir el apartado desde la lista y tocar <strong>"✓ Marcar completado"</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Estados de un apartado</h3>
+      <div class="states-grid">
+        <div class="state-card" style="background:#d1fae5">
+          <div class="s-dot" style="background:#10b981"></div>
+          <div class="s-info"><strong>Activo</strong><span>Vigente, esperando que la clienta regrese</span></div>
+        </div>
+        <div class="state-card" style="background:#fee2e2">
+          <div class="s-dot" style="background:#ef4444"></div>
+          <div class="s-info"><strong>Vencido</strong><span>Pasó la fecha límite sin acción</span></div>
+        </div>
+        <div class="state-card" style="background:#dbeafe">
+          <div class="s-dot" style="background:#3b82f6"></div>
+          <div class="s-info"><strong>Completado</strong><span>Liquidado y entregado a la clienta</span></div>
+        </div>
+        <div class="state-card" style="background:#f3f4f6">
+          <div class="s-dot" style="background:#9ca3af"></div>
+          <div class="s-info"><strong>Cancelado</strong><span>Cancelado manualmente</span></div>
+        </div>
+      </div>
+
+      <h3>Ver y gestionar apartados (sistema web)</h3>
+      <p>El botón <strong>"📦 Apartados"</strong> en la barra superior del POS abre un modal con la lista de todos los apartados activos. Cada tarjeta muestra: nombre, folio, SKUs de las prendas, total, anticipo, resta y fecha de vencimiento. Al hacer clic en una tarjeta se ve el detalle completo con opciones para completar o cancelar.</p>
+
+    </div>
+  </div>
+
+  <!-- API -->
+  <div class="doc-section" id="api">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#f0fdf4">⚙️</div>
+      <div>
+        <h2>API interna</h2>
+        <p>Endpoints bajo <code>/api/</code> — requieren sesión activa</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="api-list">
+        <div class="api-item"><span class="api-file">api/auth.php</span><span class="api-desc">login, logout, forgot, reset_password</span></div>
+        <div class="api-item"><span class="api-file">api/productos.php</span><span class="api-desc">listar, buscar, by_sku, crear, editar, ajuste de stock</span></div>
+        <div class="api-item"><span class="api-file">api/ventas.php</span><span class="api-desc">confirmar, listar, get, cancelar, reenviar_ticket</span></div>
+        <div class="api-item"><span class="api-file">api/promociones.php</span><span class="api-desc">activas, listar, crear, editar, toggle activo</span></div>
+        <div class="api-item"><span class="api-file">api/apartados.php</span><span class="api-desc">list, get, crear, completar, cancelar</span></div>
+        <div class="api-item"><span class="api-file">api/usuarios.php</span><span class="api-desc">listar, crear, editar, toggle activo</span></div>
+        <div class="api-item"><span class="api-file">api/reportes.php</span><span class="api-desc">resumen del día/mes, ventas por rango, detalle</span></div>
+        <div class="api-item"><span class="api-file">api/configuracion.php</span><span class="api-desc">get parámetros, actualizar</span></div>
+      </div>
+      <div class="alert-box alert-info" style="margin-top:14px">
+        <span class="a-ico">ℹ️</span>
+        <span>Todos los endpoints responden en JSON con la estructura <code>{ success: true/false, ... }</code>. Las respuestas de error incluyen el campo <code>error</code> con el mensaje.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DB -->
+  <div class="doc-section" id="db">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#fdf4ff">🗄️</div>
+      <div>
+        <h2>Base de datos</h2>
+        <p>MariaDB — schema principal en <code>database/schema.sql</code></p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <table class="doc-table">
+        <thead><tr><th>Tabla</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td><code>usuarios</code></td><td>Cuentas de acceso, roles y tokens de recuperación</td></tr>
+          <tr><td><code>productos</code></td><td>Catálogo con SKU único (marca+modelo+color+talla), stock, precio y costo</td></tr>
+          <tr><td><code>movimientos_inventario</code></td><td>Historial de cada cambio de stock con usuario y motivo</td></tr>
+          <tr><td><code>ventas</code></td><td>Cabecera de cada venta: folio, cajero, total, método de pago, descuento</td></tr>
+          <tr><td><code>detalle_ventas</code></td><td>Líneas de cada venta: producto, cantidad, precio unitario, subtotal</td></tr>
+          <tr><td><code>promociones</code></td><td>Descuentos configurables por porcentaje o monto fijo con vigencia</td></tr>
+          <tr><td><code>apartados</code></td><td>Cabecera de cada apartado: folio, cliente, anticipo, vigencia, estado</td></tr>
+          <tr><td><code>apartado_prendas</code></td><td>Prendas incluidas en cada apartado con cantidades y precios</td></tr>
+          <tr><td><code>configuracion</code></td><td>Parámetros globales del negocio (clave → valor)</td></tr>
+          <tr><td><code>clientes</code></td><td>Registro opcional de clientes con nombre, correo y teléfono</td></tr>
+        </tbody>
+      </table>
+      <div class="alert-box alert-warning" style="margin-top:14px">
+        <span class="a-ico">⚠️</span>
+        <span>En hosting compartido, ejecutar los scripts SQL desde <strong>phpMyAdmin</strong> seleccionando primero la base de datos, sin usar el comando <code>USE</code>. El archivo de migración de apartados es <code>database/apartados_migration.sql</code>.</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────────────────
+       PARTE 2 — APLICACIÓN ANDROID
+  ───────────────────────────────────────────── -->
+  <div class="part-header">
+    <div class="part-label">Parte 2 — Aplicación Android (Híbrida)</div>
+    <div class="part-divider"></div>
+  </div>
+
+  <!-- Qué es la app -->
+  <div class="doc-section" id="app-overview">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#fdf4ff">📱</div>
+      <div>
+        <h2>¿Qué es la aplicación?</h2>
+        <p>App híbrida: WebView nativa que carga <code>views/pose.php</code></p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <p>La app de Android <strong>no es una app nativa pura</strong> ni una PWA independiente. Es una <strong>WebView</strong> (un navegador embebido dentro de la app) que carga la página <code>pose.php</code> del servidor. El contenido y la lógica viven en el servidor; la app solo es el contenedor que lo muestra en pantalla completa y aporta acceso a la cámara del teléfono.</p>
+
+      <div class="alert-box alert-success">
+        <span class="a-ico">✅</span>
+        <span><strong>Ventaja clave:</strong> cualquier cambio en <code>pose.php</code> se refleja automáticamente en la app sin necesidad de actualizar el APK ni publicar una nueva versión en la tienda.</span>
+      </div>
+
+      <p><code>pose.php</code> es un archivo <strong>autónomo</strong>: contiene todo el HTML, CSS y JavaScript en un solo archivo, sin depender de <code>assets/js/app.js</code> ni de otros recursos externos, lo que garantiza que la WebView lo cargue de forma confiable.</p>
+    </div>
+  </div>
+
+  <!-- Arquitectura -->
+  <div class="doc-section" id="app-arquitectura">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#eff6ff">🏗️</div>
+      <div>
+        <h2>Arquitectura</h2>
+        <p>Cómo se comunican la app, el servidor y la base de datos</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="code-block">
+<span class="cmt">┌─────────────────────────────────────┐</span>
+<span class="cmt">│         App Android (APK)           │</span>
+│  WebView → <span class="str">pose.php</span>               │
+│  Bridge: <span class="fn">AndroidApp</span>.<span class="fn">abrirCamaraNativa()</span> │
+<span class="cmt">└──────────────┬──────────────────────┘</span>
+               │ HTTPS
+<span class="cmt">┌──────────────▼──────────────────────┐</span>
+<span class="cmt">│   Servidor (tu-dominio.com)         │</span>
+│   <span class="str">views/pose.php</span>                   │
+│   <span class="str">api/*.php</span>                        │
+<span class="cmt">└──────────────┬──────────────────────┘</span>
+               │ PDO
+<span class="cmt">┌──────────────▼──────────────────────┐</span>
+<span class="cmt">│         Base de datos MariaDB        │</span>
+<span class="cmt">└─────────────────────────────────────┘</span>
+      </div>
+
+      <h3>Bridge nativo — <code>AndroidApp</code></h3>
+      <p>El objeto <code>AndroidApp</code> es expuesto por la WebView de Android al JavaScript de la página. Actualmente expone:</p>
+      <div class="code-block">
+<span class="kw">if</span> (<span class="kw">typeof</span> <span class="fn">AndroidApp</span> !== <span class="str">"undefined"</span>) {
+  <span class="fn">AndroidApp</span>.<span class="fn">abrirCamaraNativa</span>();
+  <span class="cmt">// Abre el escáner del teléfono.</span>
+  <span class="cmt">// Cuando lee un código, devuelve el SKU</span>
+  <span class="cmt">// al campo de búsqueda automáticamente.</span>
+}
+      </div>
+      <p>Si <code>AndroidApp</code> no existe (p. ej. al abrir <code>pose.php</code> en un navegador normal), la app cae automáticamente al escáner web con la API <code>BarcodeDetector</code> del navegador.</p>
+
+      <div class="alert-box alert-warning">
+        <span class="a-ico">⚠️</span>
+        <span>La app <strong>requiere conexión a internet</strong> en todo momento. No hay modo offline ni caché local de datos. Sin conexión, las búsquedas y los cobros no funcionan.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login app -->
+  <div class="doc-section" id="app-login">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#fef3c7">🔑</div>
+      <div>
+        <h2>Pantalla de Login</h2>
+        <p>Primera pantalla si no hay sesión activa</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <ul>
+        <li>Campo de correo electrónico y contraseña (con botón ojo para mostrar/ocultar).</li>
+        <li>Botón <strong>"Iniciar sesión"</strong> — llama al API y arranca la sesión.</li>
+        <li>Enlace <strong>"¿Olvidaste tu contraseña?"</strong> — muestra el formulario de recuperación sin salir de la app; el servidor envía el enlace de restablecimiento al correo.</li>
+        <li>La sesión persiste mientras la app esté abierta (cookie de sesión del servidor, 24 horas). Al expirar, regresa automáticamente al login.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Pestaña buscar -->
+  <div class="doc-section" id="app-buscar">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#f0fdf4">🔍</div>
+      <div>
+        <h2>Pestaña Buscar</h2>
+        <p>Búsqueda de productos por SKU, nombre o cámara</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+
+      <div class="tab-visual">
+        <div class="tab-item active"><span class="t-ico">🔍</span>BUSCAR</div>
+        <div class="tab-item"><span class="t-ico">🛒</span>CARRITO</div>
+        <div class="tab-item"><span class="t-ico">📦</span>APARTADOS</div>
+      </div>
+
+      <h3>Barra de búsqueda</h3>
+      <ul>
+        <li>Campo de texto con teclado optimizado para código de barras.</li>
+        <li>Búsqueda en tiempo real después de 350 ms de pausa al escribir.</li>
+        <li>Busca por SKU exacto, o en nombre, marca, color y talla simultáneamente.</li>
+      </ul>
+
+      <h3>Botón 📹 Cámara</h3>
+      <ul>
+        <li><strong>En la app Android</strong>: activa el escáner nativo del teléfono (más rápido y confiable). Lee QR y códigos de barras Code 39.</li>
+        <li><strong>En navegador web</strong>: abre la cámara trasera del dispositivo y detecta el código con <code>BarcodeDetector</code>.</li>
+        <li>Al leer un código, el SKU se pone en el campo y lanza la búsqueda automáticamente.</li>
+      </ul>
+
+      <h3>Resultados</h3>
+      <ul>
+        <li>SKU exacto → muestra la tarjeta del producto directo.</li>
+        <li>Coincidencias parciales → lista de resultados; toca uno para seleccionarlo.</li>
+        <li>La tarjeta del producto muestra: nombre, SKU, stock disponible y precio. Botón <strong>"+ Agregar"</strong> lo añade al carrito.</li>
+      </ul>
+
+      <h3>Selector de promoción</h3>
+      <p>Si hay promociones activas y vigentes, aparece un selector. Al elegir una, el descuento se aplica automáticamente al total del carrito.</p>
+
+    </div>
+  </div>
+
+  <!-- Pestaña carrito -->
+  <div class="doc-section" id="app-carrito">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#fefce8">🛒</div>
+      <div>
+        <h2>Pestaña Carrito</h2>
+        <p>Gestión de artículos seleccionados y opciones de cobro</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+
+      <div class="tab-visual">
+        <div class="tab-item"><span class="t-ico">🔍</span>BUSCAR</div>
+        <div class="tab-item active"><span class="t-ico">🛒</span>CARRITO</div>
+        <div class="tab-item"><span class="t-ico">📦</span>APARTADOS</div>
+      </div>
+
+      <h3>Artículos en el carrito</h3>
+      <ul>
+        <li>Cada artículo muestra nombre, SKU, controles de cantidad y precio del renglón.</li>
+        <li>Botón <strong>−</strong> reduce; si llega a cero, elimina el artículo.</li>
+        <li>Botón <strong>+</strong> aumenta; el límite superior es el stock disponible.</li>
+        <li>Botón <strong>✕</strong> elimina el artículo directamente.</li>
+      </ul>
+
+      <h3>Resumen de totales</h3>
+      <p>Subtotal → Descuento (si hay promo) → <strong>TOTAL</strong> en grande. Se recalcula automáticamente con cada cambio.</p>
+
+      <h3>Botones de acción</h3>
+      <table class="doc-table">
+        <thead><tr><th>Botón</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>💵 Cobrar en efectivo</td>
+            <td>Modal de confirmación → correo opcional → registra venta, descuenta stock, genera folio → pantalla de éxito.</td>
+          </tr>
+          <tr>
+            <td>💳 Cobrar con Clip</td>
+            <td>Igual que efectivo pero pide el folio del voucher Clip (obligatorio) y muestra la comisión calculada.</td>
+          </tr>
+          <tr>
+            <td>📦 Apartar prendas</td>
+            <td>Abre el modal de apartado (ver pestaña Apartados).</td>
+          </tr>
+          <tr>
+            <td>🗑 Limpiar carrito</td>
+            <td>Vacía el carrito sin registrar nada.</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- Pestaña apartados app -->
+  <div class="doc-section" id="app-apartados">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#fffbeb">📦</div>
+      <div>
+        <h2>Pestaña Apartados</h2>
+        <p>Crear y gestionar reservas de prendas con anticipo</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+
+      <div class="tab-visual">
+        <div class="tab-item"><span class="t-ico">🔍</span>BUSCAR</div>
+        <div class="tab-item"><span class="t-ico">🛒</span>CARRITO</div>
+        <div class="tab-item active"><span class="t-ico">📦</span>APARTADOS</div>
+      </div>
+
+      <h3>Crear un apartado</h3>
+      <p>El apartado <strong>no tiene buscador propio</strong>. Las prendas se seleccionan desde la pestaña Buscar y se agregan al carrito como en una venta normal. Luego en el carrito se toca <strong>"📦 Apartar prendas"</strong>.</p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-body">
+            <strong>Buscar → Carrito</strong>
+            <p>Agrega las prendas a apartar igual que si fuera una venta normal.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-body">
+            <strong>Tocar "📦 Apartar prendas"</strong>
+            <p>Sube un modal (bottom sheet) con el formulario del apartado.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-body">
+            <strong>Llenar datos</strong>
+            <p>Nombre de la clienta · Teléfono · Anticipo (el saldo que paga hoy) · Días de vigencia (default 30) · Notas. El monto "Resta por pagar" se calcula en tiempo real.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-body">
+            <strong>Confirmar → folio generado</strong>
+            <p>El apartado se guarda con folio <code>APT-XXXXXX</code>. El carrito se limpia y el badge de la pestaña Apartados se actualiza.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Lista de apartados activos</h3>
+      <p>La pestaña muestra tarjetas de todos los apartados activos (incluye vencidos). Cada tarjeta muestra nombre, folio, SKUs de las prendas, Total / Anticipo / Resta y fecha de vencimiento. El badge rojo de la pestaña indica cuántos apartados activos hay.</p>
+
+      <h3>Detalle y gestión</h3>
+      <p>Al tocar una tarjeta se abre el detalle completo. Desde ahí:</p>
+      <ul>
+        <li><strong>✓ Marcar completado</strong> — la clienta regresó, pagó el saldo y se llevó las prendas. (Primero procesar el pago de saldo como venta normal en el POS.)</li>
+        <li><strong>✕ Cancelar</strong> — la clienta desistió o venció el plazo.</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- App vs web -->
+  <div class="doc-section" id="app-vs-web">
+    <div class="doc-section-header">
+      <div class="sec-icon" style="background:#f0fdf4">↔️</div>
+      <div>
+        <h2>App vs Sistema web</h2>
+        <p>Misma base de datos, diferente interfaz</p>
+      </div>
+    </div>
+    <div class="doc-section-body">
+
+      <div class="compare-grid">
+        <div class="compare-card is-web">
+          <h4>💻 Sistema web — <code>pos.php</code></h4>
+          <ul>
+            <li>Layout de sidebar + dos columnas</li>
+            <li>Acceso desde cualquier navegador</li>
+            <li>Todos los módulos del sistema</li>
+            <li>Apartados en botón del topbar → modal</li>
+            <li>Cámara web del navegador para QR</li>
+            <li>Dashboard, reportes y configuración</li>
+          </ul>
+        </div>
+        <div class="compare-card is-app">
+          <h4>📱 App Android — <code>pose.php</code></h4>
+          <ul>
+            <li>Layout mobile-first con pestañas</li>
+            <li>Solo en dispositivo Android con el APK</li>
+            <li>Solo POS y Apartados</li>
+            <li>Apartados en pestaña dedicada</li>
+            <li>Escáner nativo del teléfono (mejor)</li>
+            <li>Optimizada para uso en tienda</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert-box alert-success" style="margin-top:16px">
+        <span class="a-ico">✅</span>
+        <span>Ambas interfaces comparten la <strong>misma base de datos y la misma API</strong>. Una venta o apartado registrado desde la app aparece al instante en el sistema web, y viceversa.</span>
+      </div>
+
+      <table class="doc-table" style="margin-top:16px">
+        <thead><tr><th>Aspecto</th><th>App (<code>pose.php</code>)</th><th>Web (<code>pos.php</code>)</th></tr></thead>
+        <tbody>
+          <tr><td>Archivo principal</td><td><code>views/pose.php</code></td><td><code>views/pos.php</code></td></tr>
+          <tr><td>JS/CSS</td><td>Todo embebido en el mismo archivo</td><td>Carga <code>assets/js/app.js</code> y <code>assets/css/main.css</code></td></tr>
+          <tr><td>Cámara QR</td><td>Escáner nativo Android + fallback web</td><td>Solo cámara web del navegador</td></tr>
+          <tr><td>Módulos disponibles</td><td>POS + Apartados únicamente</td><td>Sistema completo</td></tr>
+          <tr><td>Actualización</td><td>Editar <code>pose.php</code>, sin tocar el APK</td><td>Editar cualquier archivo del servidor</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+  // Marcar el enlace activo del sidebar al hacer scroll
+  const sections = document.querySelectorAll('.doc-section, .doc-section[id]');
+  const links    = document.querySelectorAll('.sidebar a');
+
+  function setActive() {
+    let current = '';
+    document.querySelectorAll('[id]').forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  // Smooth scroll
+  links.forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
