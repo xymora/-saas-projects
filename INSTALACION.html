@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Boutique POS — Guía de instalación</title>
+<style>
+  :root {
+    --brand:       #c8956c;
+    --brand-dark:  #a8754c;
+    --brand-light: #f3e5d8;
+    --dark:        #1a1a2e;
+    --success:     #10b981;
+    --warning:     #f59e0b;
+    --danger:      #ef4444;
+    --gray-900:    #111827;
+    --gray-700:    #374151;
+    --gray-500:    #6b7280;
+    --gray-300:    #d1d5db;
+    --gray-100:    #f3f4f6;
+    --white:       #ffffff;
+    --radius:      10px;
+    --shadow:      0 4px 24px rgba(0,0,0,.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f8f5f1;
+    color: var(--gray-900);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, #2d1b69 60%, #1a1a2e 100%);
+    color: white;
+    padding: 56px 40px 48px;
+    text-align: center;
+  }
+  .hero-brand { font-size: 42px; font-weight: 800; color: var(--brand); letter-spacing: 1px; }
+  .hero-sub   { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: 4px; }
+  .hero-title { font-size: 22px; font-weight: 600; color: rgba(255,255,255,.9); margin-top: 20px; }
+  .hero-badge {
+    display: inline-block; margin-top: 16px;
+    background: rgba(200,149,108,.2); border: 1px solid var(--brand);
+    color: var(--brand); padding: 5px 18px; border-radius: 99px;
+    font-size: 12px; font-weight: 600; letter-spacing: .5px;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 48px 24px; }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    border-left: 4px solid var(--brand);
+  }
+  .toc-title { font-size: 13px; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: var(--brand-dark); text-decoration: none; font-weight: 500; font-size: 14px; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ── Quick-ref credenciales ── */
+  .quick-creds {
+    background: var(--dark);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 36px;
+    margin-bottom: 28px;
+  }
+  .quick-creds-title {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 22px;
+  }
+  .quick-creds-title .label {
+    font-size: 18px; font-weight: 800; color: var(--brand);
+  }
+  .quick-creds-title .sub {
+    font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px;
+  }
+  .creds-dark-table { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); }
+  .creds-dark-table thead tr { background: rgba(255,255,255,.06); }
+  .creds-dark-table thead th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .8px; white-space: nowrap; }
+  .creds-dark-table tbody tr { border-top: 1px solid rgba(255,255,255,.06); }
+  .creds-dark-table td { padding: 13px 16px; }
+  .creds-dark-table .td-name  { color: white; font-weight: 600; font-size: 14px; }
+  .creds-dark-table .td-email { color: rgba(255,255,255,.7); font-size: 13px; font-family: 'Consolas', monospace; }
+  .pass-chip { background: var(--brand); color: white; font-family: 'Consolas', monospace; font-weight: 700; padding: 4px 12px; border-radius: 6px; font-size: 14px; letter-spacing: .5px; }
+  .quick-warn { margin-top: 16px; background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.3); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #fde68a; }
+
+  /* ── DB credentials ── */
+  .db-creds {
+    background: #0f172a;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    border: 1px solid rgba(200,149,108,.3);
+  }
+  .db-creds-title { font-size: 15px; font-weight: 700; color: var(--brand); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .db-row { display: flex; align-items: center; gap: 0; margin-bottom: 10px; font-family: 'Consolas', monospace; font-size: 14px; }
+  .db-row:last-child { margin-bottom: 0; }
+  .db-key   { color: #cba6f7; min-width: 120px; flex-shrink: 0; }
+  .db-arrow { color: rgba(255,255,255,.3); margin: 0 10px; }
+  .db-val   { color: #a6e3a1; font-weight: 700; }
+  .db-val.pass { color: #f38ba8; }
+
+  /* ── Sections ── */
+  .section {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 36px;
+    margin-bottom: 28px;
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    padding-bottom: 18px; margin-bottom: 24px;
+    border-bottom: 2px solid var(--gray-100);
+  }
+  .section-num {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: var(--brand); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 15px;
+  }
+  .section-num.icon { background: var(--dark); font-size: 18px; }
+  h2 { font-size: 19px; font-weight: 700; color: var(--gray-900); }
+  h3 { font-size: 15px; font-weight: 700; color: var(--gray-700); margin: 20px 0 10px; }
+  p  { margin-bottom: 12px; color: var(--gray-700); }
+
+  /* ── Steps ── */
+  .steps { list-style: none; counter-reset: step; }
+  .steps li {
+    counter-increment: step;
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 12px 0; border-bottom: 1px solid var(--gray-100);
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(step);
+    width: 26px; height: 26px; flex-shrink: 0;
+    background: var(--brand-light); color: var(--brand-dark);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 12px; margin-top: 2px;
+  }
+
+  /* ── Code ── */
+  code {
+    background: #1e1e2e; color: #cdd6f4;
+    padding: 2px 8px; border-radius: 5px;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: #1e1e2e; color: #cdd6f4;
+    border-radius: var(--radius); padding: 20px 24px;
+    overflow-x: auto; font-size: 13px; line-height: 1.7;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    margin: 14px 0;
+    position: relative;
+  }
+  pre .comment { color: #6c7086; }
+  pre .kw  { color: #cba6f7; }
+  pre .str { color: #a6e3a1; }
+  .copy-btn {
+    position: absolute; top: 10px; right: 12px;
+    background: rgba(255,255,255,.1); border: none; color: #cdd6f4;
+    padding: 4px 10px; border-radius: 5px; font-size: 11px; cursor: pointer;
+    transition: background .2s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,.2); }
+
+  /* ── Alerts ── */
+  .alert {
+    padding: 14px 18px; border-radius: var(--radius);
+    border-left: 4px solid; margin: 16px 0; font-size: 14px;
+  }
+  .alert-warning { background: #fef3c7; border-color: var(--warning); color: #92400e; }
+  .alert-success { background: #d1fae5; border-color: var(--success); color: #065f46; }
+  .alert-info    { background: #e0f2fe; border-color: #0ea5e9; color: #0c4a6e; }
+  .alert strong  { font-weight: 700; }
+
+  /* ── Role badges ── */
+  .role-badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+  .role-admin    { background: #ede9fe; color: #5b21b6; }
+  .role-dueno    { background: #fef3c7; color: #92400e; }
+  .role-empleado { background: #d1fae5; color: #065f46; }
+
+  /* ── Light creds table (section 9) ── */
+  .creds-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .creds-table thead { background: var(--dark); }
+  .creds-table thead th { color: white; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; }
+  .creds-table tbody tr { border-bottom: 1px solid var(--gray-100); transition: background .15s; }
+  .creds-table tbody tr:last-child { border-bottom: none; }
+  .creds-table tbody tr:hover { background: var(--brand-light); }
+  .creds-table td { padding: 13px 16px; font-size: 14px; }
+  .creds-table .td-pass { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-weight: 700; color: var(--dark); }
+
+  /* ── Dir tree ── */
+  .dir-tree {
+    background: #1e1e2e; color: #cdd6f4;
+    border-radius: var(--radius); padding: 20px 24px;
+    font-family: 'Cascadia Code','Fira Code','Consolas',monospace;
+    font-size: 13px; line-height: 1.9; overflow-x: auto;
+  }
+  .dir-tree .folder { color: #89dceb; font-weight: 700; }
+  .dir-tree .desc   { color: #6c7086; }
+
+  /* ── Tech notes grid ── */
+  .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .note-card { background: var(--gray-100); border-radius: var(--radius); padding: 14px 16px; font-size: 13px; border-left: 3px solid var(--brand); }
+  .note-card strong { display: block; color: var(--gray-900); margin-bottom: 3px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .note-card span { color: var(--gray-700); }
+
+  /* ── Endpoints ── */
+  .endpoint-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+  .endpoint-row:last-child { border-bottom: none; }
+  .method { display: inline-block; padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 2px; font-family: monospace; }
+  .method-post { background: #dbeafe; color: #1e40af; }
+  .method-get  { background: #d1fae5; color: #065f46; }
+
+  /* ── Footer ── */
+  footer { text-align: center; padding: 32px 24px; color: var(--gray-500); font-size: 13px; border-top: 1px solid var(--gray-300); margin-top: 16px; }
+  footer strong { color: var(--brand); }
+
+  @media (max-width: 640px) {
+    .hero { padding: 40px 20px; }
+    .section, .quick-creds, .db-creds { padding: 24px 20px; }
+    .notes-grid { grid-template-columns: 1fr; }
+    .creds-table td, .creds-dark-table td { padding: 10px 10px; font-size: 13px; }
+    .db-row { flex-direction: column; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-brand">Mi Boutique</div>
+  <div class="hero-sub">Boutique &middot; Sistema POS</div>
+  <div class="hero-title">Guía de Instalación y Configuración</div>
+  <div class="hero-badge">v1.0 &nbsp;·&nbsp; PHP 8+ &nbsp;·&nbsp; MariaDB &nbsp;·&nbsp; cPanel Ready</div>
+</div>
+
+<div class="container">
+
+  <!-- ── TOC ── -->
+  <div class="toc">
+    <div class="toc-title">Contenido</div>
+    <ol>
+      <li><a href="#creds-usuarios">Contraseñas de usuarios del sistema</a></li>
+      <li><a href="#creds-db">Credenciales de base de datos</a></li>
+      <li><a href="#requisitos">Requisitos del servidor</a></li>
+      <li><a href="#archivos">Subir archivos al hosting</a></li>
+      <li><a href="#base-datos">Crear la base de datos en cPanel</a></li>
+      <li><a href="#schema">Importar el schema SQL</a></li>
+      <li><a href="#url">URL base — automática</a></li>
+      <li><a href="#seed">Generar contraseñas iniciales (seed)</a></li>
+      <li><a href="#permisos">Permisos de escritura</a></li>
+      <li><a href="#estructura">Estructura de directorios</a></li>
+      <li><a href="#android">Módulo Android / App híbrida</a></li>
+      <li><a href="#tecnico">Notas técnicas</a></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       TABLA 1 — CONTRASEÑAS DE USUARIOS
+  ════════════════════════════════════════════════════════════ -->
+  <div class="quick-creds" id="creds-usuarios">
+    <div class="quick-creds-title">
+      <span style="font-size:24px">🔐</span>
+      <div>
+        <div class="label">Contraseñas iniciales de todos los usuarios</div>
+        <div class="sub">Solo activas después de ejecutar <code style="background:rgba(255,255,255,.1);color:#cdd6f4;font-size:12px">php database/seed_passwords.php</code></div>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto">
+      <table class="creds-dark-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Contraseña</th>
+            <th>Rol</th>
+            <th>Acceso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-name">Administrador Sistema</td>
+            <td class="td-email">admin@miboutique.com</td>
+            <td><span class="pass-chip">Admin123!</span></td>
+            <td><span class="role-badge role-admin">Admin</span></td>
+            <td style="color:rgba(255,255,255,.6);font-size:13px">Total + Panel Admin</td>
+          </tr>
+          <tr>
+            <td class="td-name">Dueño Principal</td>
+            <td class="td-email">dueno1@miboutique.com</td>
+            <td><span class="pass-chip">Dueno123!</span></td>
+            <td><span class="role-badge role-dueno">Dueño</span></td>
+            <td style="color:rgba(255,255,255,.6);font-size:13px">Dashboard, reportes, POS</td>
+          </tr>
+          <tr>
+            <td class="td-name">Dueña Secundaria</td>
+            <td class="td-email">dueno2@miboutique.com</td>
+            <td><span class="pass-chip">Duena123!</span></td>
+            <td><span class="role-badge role-dueno">Dueño</span></td>
+            <td style="color:rgba(255,255,255,.6);font-size:13px">Dashboard, reportes, POS</td>
+          </tr>
+          <tr>
+            <td class="td-name">Empleada Uno</td>
+            <td class="td-email">empleado1@miboutique.com</td>
+            <td><span class="pass-chip">Emp1Pass!</span></td>
+            <td><span class="role-badge role-empleado">Empleado</span></td>
+            <td style="color:rgba(255,255,255,.6);font-size:13px">POS + Inventario</td>
+          </tr>
+          <tr>
+            <td class="td-name">Empleada Dos</td>
+            <td class="td-email">empleado2@miboutique.com</td>
+            <td><span class="pass-chip">Emp2Pass!</span></td>
+            <td><span class="role-badge role-empleado">Empleado</span></td>
+            <td style="color:rgba(255,255,255,.6);font-size:13px">POS + Inventario</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="quick-warn">⚠️ <strong>Cambia todas las contraseñas</strong> desde el módulo Usuarios después del primer acceso.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       TABLA 2 — CREDENCIALES DE BASE DE DATOS
+  ════════════════════════════════════════════════════════════ -->
+  <div class="db-creds" id="creds-db">
+    <div class="db-creds-title">🗄️ Credenciales de Base de Datos — <code style="background:rgba(255,255,255,.08);color:#89dceb;font-size:13px">config/db.php</code></div>
+    <div class="db-row"><span class="db-key">DB_HOST</span><span class="db-arrow">→</span><span class="db-val">localhost</span></div>
+    <div class="db-row"><span class="db-key">DB_PORT</span><span class="db-arrow">→</span><span class="db-val">3306</span></div>
+    <div class="db-row"><span class="db-key">DB_NAME</span><span class="db-arrow">→</span><span class="db-val">covenant_B0ut1qu3</span></div>
+    <div class="db-row"><span class="db-key">DB_USER</span><span class="db-arrow">→</span><span class="db-val">covenant_B0ut1qu31aula</span></div>
+    <div class="db-row"><span class="db-key">DB_PASS</span><span class="db-arrow">→</span><span class="db-val pass">B0#ut1qu3$1aula</span></div>
+    <div class="db-row"><span class="db-key">DB_CHARSET</span><span class="db-arrow">→</span><span class="db-val">utf8mb4</span></div>
+    <div style="margin-top:16px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:12px 16px;font-size:13px;color:#fca5a5">
+      🔒 <strong>Mantén este archivo fuera del control de versiones.</strong> No subas <code style="background:rgba(255,255,255,.1)">db.php</code> a GitHub ni repositorios públicos.
+    </div>
+  </div>
+
+  <!-- ── 1. Requisitos ── -->
+  <div class="section" id="requisitos">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Requisitos del servidor</h2>
+    </div>
+    <ul class="steps">
+      <li><span>PHP <strong>8.0 o superior</strong></span></li>
+      <li><span>MariaDB <strong>10.5+</strong> (o MySQL 8+)</span></li>
+      <li><span>Apache con <strong>mod_rewrite</strong> habilitado</span></li>
+      <li><span>Extensiones PHP: <code>pdo_mysql</code>, <code>mbstring</code>, <code>fileinfo</code></span></li>
+    </ul>
+    <div class="alert alert-info" style="margin-top:18px">ℹ️ En hosting compartido (cPanel) todas estas extensiones suelen estar habilitadas por defecto.</div>
+  </div>
+
+  <!-- ── 2. Archivos ── -->
+  <div class="section" id="archivos">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Subir archivos al hosting</h2>
+    </div>
+    <p>Sube la carpeta <code>mi-boutique/</code> completa al directorio raíz de tu hosting:</p>
+    <ul class="steps">
+      <li><span>Conéctate vía <strong>FTP</strong> (FileZilla, Cyberduck) o usa el <strong>Administrador de archivos</strong> de cPanel.</span></li>
+      <li><span>Coloca la carpeta dentro de <code>public_html/</code>, quedando así: <code>public_html/mi-boutique/</code></span></li>
+      <li><span>Verifica que <code>index.php</code> esté en la raíz del proyecto.</span></li>
+    </ul>
+  </div>
+
+  <!-- ── 3. Base de datos ── -->
+  <div class="section" id="base-datos">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Crear la base de datos en cPanel</h2>
+    </div>
+    <ol class="steps">
+      <li><span>Entra a cPanel → <strong>MySQL Databases</strong>.</span></li>
+      <li><span>En "Create New Database" escribe un nombre y haz clic en <strong>Create Database</strong>.</span></li>
+      <li><span>En "MySQL Users" crea un usuario nuevo con contraseña segura.</span></li>
+      <li><span>En "Add User To Database" selecciona usuario y BD → <strong>ALL PRIVILEGES</strong> → <strong>Make Changes</strong>.</span></li>
+    </ol>
+    <div class="alert alert-warning">⚠️ <strong>Importante:</strong> Los nombres reales tendrán el prefijo de tu cuenta cPanel. Anótalos bien y actualiza <code>config/db.php</code>.</div>
+  </div>
+
+  <!-- ── 4. Schema ── -->
+  <div class="section" id="schema">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Importar el schema SQL</h2>
+    </div>
+    <div class="alert alert-warning">⚠️ <strong>Usa el archivo <code>database/schema_hosting.sql</code></strong>, NO el <code>schema.sql</code>. El de hosting NO incluye <code>CREATE DATABASE</code> (prohibido en hosting compartido).</div>
+    <ol class="steps">
+      <li><span>Abre <strong>phpMyAdmin</strong> desde cPanel.</span></li>
+      <li><span>Selecciona tu base de datos en el panel izquierdo.</span></li>
+      <li><span>Haz clic en la pestaña <strong>Importar</strong>.</span></li>
+      <li><span>Selecciona <code>database/schema_hosting.sql</code> y haz clic en <strong>Continuar</strong>.</span></li>
+    </ol>
+    <div class="alert alert-success">✓ Si el import fue exitoso verás: <code>configuracion</code>, <code>usuarios</code>, <code>productos</code>, <code>ventas</code>, <code>detalle_ventas</code>, <code>promociones</code>, <code>clientes</code>, <code>movimientos_inventario</code>.</div>
+  </div>
+
+  <!-- ── 5. URL base ── -->
+  <div class="section" id="url">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>URL base — automática, sin configuración</h2>
+    </div>
+    <div class="alert alert-success">✓ <strong>No necesitas editar nada.</strong> El sistema detecta automáticamente protocolo, dominio y ruta desde las variables del servidor PHP. Funciona igual en <code>localhost</code> y en producción.</div>
+    <table style="width:100%;border-collapse:collapse;margin-top:12px;font-size:13px">
+      <thead><tr style="background:var(--gray-100)"><th style="padding:10px 14px;text-align:left">Ubicación del proyecto</th><th style="padding:10px 14px;text-align:left">BASE_URL resultante</th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:10px 14px"><code>public_html/mi-boutique/</code></td><td style="padding:10px 14px"><code>https://tudominio.com/mi-boutique</code></td></tr>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:10px 14px"><code>public_html/sistema/</code></td><td style="padding:10px 14px"><code>https://tudominio.com/sistema</code></td></tr>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:10px 14px"><code>public_html/</code> (raíz)</td><td style="padding:10px 14px"><code>https://tudominio.com</code></td></tr>
+        <tr><td style="padding:10px 14px"><code>htdocs/mi-boutique/</code></td><td style="padding:10px 14px"><code>http://localhost/mi-boutique</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 6. Seed ── -->
+  <div class="section" id="seed">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Generar contraseñas iniciales (seed)</h2>
+    </div>
+    <p>El SQL inserta un placeholder en <code>password_hash</code>. Debes ejecutar el seeder para generar los hashes bcrypt reales:</p>
+    <h3>Opción A — Desde terminal / SSH</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button>php database/seed_passwords.php</pre>
+    <h3>Opción B — Desde el navegador (sin SSH)</h3>
+    <p>Visita temporalmente:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button>https://tu-dominio.com/mi-boutique/database/seed_passwords.php</pre>
+    <div class="alert alert-warning" style="margin-top:12px">⚠️ <strong>Elimina <code>seed_passwords.php</code> inmediatamente después de ejecutarlo.</strong></div>
+  </div>
+
+  <!-- ── 7. Permisos ── -->
+  <div class="section" id="permisos">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Permisos de escritura (logos)</h2>
+    </div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copiar</button>chmod 755 uploads/logos/</pre>
+    <p>En el Administrador de archivos de cPanel: clic derecho sobre <code>uploads/logos/</code> → <strong>Change Permissions</strong> → <code>755</code>.</p>
+  </div>
+
+  <!-- ── 8. Estructura ── -->
+  <div class="section" id="estructura">
+    <div class="section-header">
+      <div class="section-num icon">📁</div>
+      <h2>Estructura de directorios</h2>
+    </div>
+    <div class="dir-tree">
+<span class="folder">mi-boutique/</span>
+├── <span class="folder">api/</span>
+│   ├── auth.php           <span class="desc">— Login, logout, forgot, reset password</span>
+│   ├── productos.php      <span class="desc">— CRUD inventario + ajuste de stock</span>
+│   ├── ventas.php         <span class="desc">— POS, confirmar venta, reenvío de ticket</span>
+│   ├── reportes.php       <span class="desc">— Dashboard financiero + contrafecha</span>
+│   ├── promociones.php    <span class="desc">— CRUD promociones con vigencia</span>
+│   ├── usuarios.php       <span class="desc">— Gestión de usuarios y roles</span>
+│   └── configuracion.php  <span class="desc">— Datos del negocio + subida de logo</span>
+├── <span class="folder">assets/</span>
+│   ├── css/main.css       <span class="desc">— Sistema de diseño premium</span>
+│   └── js/app.js          <span class="desc">— API helper, Toast, Modal</span>
+├── <span class="folder">config/</span>
+│   ├── db.php             <span class="desc">— Conexión PDO singleton</span>
+│   └── config.php         <span class="desc">— Constantes + URL auto-detectada + sesión</span>
+├── <span class="folder">database/</span>
+│   ├── schema.sql         <span class="desc">— Schema completo (localhost)</span>
+│   ├── schema_hosting.sql <span class="desc">— Schema para cPanel (sin CREATE DB)</span>
+│   └── seed_passwords.php <span class="desc">— Genera hashes bcrypt iniciales</span>
+├── <span class="folder">includes/</span>
+│   ├── auth.php           <span class="desc">— Helpers de sesión y control de roles</span>
+│   └── helpers.php        <span class="desc">— JSON, mail, SKU, comisión Clip</span>
+├── <span class="folder">uploads/logos/</span>         <span class="desc">— Logos subidos por el admin</span>
+└── <span class="folder">views/</span>
+    ├── login.php          <span class="desc">— Inicio de sesión</span>
+    ├── reset_password.php <span class="desc">— Restablecer contraseña</span>
+    ├── dashboard.php      <span class="desc">— Dashboard dueño/admin con gráficas</span>
+    ├── pos.php            <span class="desc">— Punto de Venta + escáner QR</span>
+    ├── inventario.php     <span class="desc">— Gestión de inventario con ajustes</span>
+    ├── etiquetas.php      <span class="desc">— Generador de etiquetas para impresora</span>
+    ├── reportes.php       <span class="desc">— Reportes financieros + comparativa</span>
+    ├── promociones.php    <span class="desc">— Gestión de promociones</span>
+    ├── usuarios.php       <span class="desc">— Gestión de usuarios</span>
+    ├── admin.php          <span class="desc">— Panel exclusivo del administrador</span>
+    ├── configuracion.php  <span class="desc">— Configuración del negocio</span>
+    ├── 403.php            <span class="desc">— Página de acceso denegado</span>
+    └── <span class="folder">partials/</span>
+        ├── head.php       <span class="desc">— HTML head + inyección de BASE_URL</span>
+        └── sidebar.php    <span class="desc">— Navegación lateral dinámica por rol</span>
+    </div>
+  </div>
+
+  <!-- ── 9. Android ── -->
+  <div class="section" id="android">
+    <div class="section-header">
+      <div class="section-num icon">📱</div>
+      <h2>Módulo Android / App híbrida</h2>
+    </div>
+    <p>Todos los endpoints en <code>/api/</code> devuelven JSON puro. La app móvil debe:</p>
+    <div class="endpoint-row"><span class="method method-post">POST</span><div><code>/api/auth.php?action=login</code> — Autenticación. Body: <code>{"email":"…","password":"…"}</code>. Devuelve cookie de sesión.</div></div>
+    <div class="endpoint-row"><span class="method method-get">GET</span><div><code>/api/productos.php?action=by_sku&amp;sku=XXX</code> — Buscar producto por SKU (escaneo QR).</div></div>
+    <div class="endpoint-row"><span class="method method-get">GET</span><div><code>/api/productos.php?q=texto</code> — Búsqueda de productos por texto.</div></div>
+    <div class="endpoint-row"><span class="method method-post">POST</span><div><code>/api/ventas.php?action=confirmar</code> — Confirmar venta. Transacción ACID completa.</div></div>
+    <div class="endpoint-row"><span class="method method-get">GET</span><div><code>/api/reportes.php?action=resumen&amp;periodo=mensual</code> — Dashboard financiero.</div></div>
+    <div class="alert alert-info" style="margin-top:18px">
+      📷 <strong>Escaneo QR:</strong> Usar <code>BarcodeDetector</code> API en WebView (Chrome 83+) o librería nativa.<br><br>
+      🍪 <strong>Sesión:</strong> Enviar <code>credentials: 'include'</code> en cada petición Fetch.
+    </div>
+  </div>
+
+  <!-- ── 10. Técnico ── -->
+  <div class="section" id="tecnico">
+    <div class="section-header">
+      <div class="section-num icon">⚙️</div>
+      <h2>Notas técnicas</h2>
+    </div>
+    <div class="notes-grid">
+      <div class="note-card"><strong>SKU automático</strong><span>Generado de Marca+Modelo+Color+Talla. Misma combinación = mismo SKU. El stock se acumula automáticamente.</span></div>
+      <div class="note-card"><strong>Comisión Clip</strong><span>3.6% × (1 + 16% IVA) = <strong>4.176%</strong> del total. Desglosado en reportes y tickets.</span></div>
+      <div class="note-card"><strong>Contraseñas</strong><span>bcrypt cost 12. Nunca en texto plano. Recuperación por token 64 chars con TTL de 1 hora.</span></div>
+      <div class="note-card"><strong>Sesión segura</strong><span>HttpOnly · SameSite=Strict · Secure auto en HTTPS · TTL 24 horas.</span></div>
+      <div class="note-card"><strong>Transacciones ACID</strong><span>Toda venta usa <code>beginTransaction / commit / rollBack</code>. Si falla cualquier paso, todo se revierte.</span></div>
+      <div class="note-card"><strong>Historial inmutable</strong><span><code>detalle_ventas</code> guarda costo y precio históricos. Cambios futuros al catálogo no afectan reportes pasados.</span></div>
+      <div class="note-card"><strong>Cero dependencias</strong><span>PHP Vanilla 8+. Sin Composer, sin frameworks, sin librerías externas.</span></div>
+      <div class="note-card"><strong>Portabilidad</strong><span>URL auto-detectada del servidor. Solo cambiar <code>config/db.php</code> al migrar a otro servidor.</span></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <strong>Mi Boutique POS</strong> &nbsp;·&nbsp; Sistema desarrollado a medida &nbsp;·&nbsp; v1.0<br>
+  <span style="margin-top:6px;display:block">PHP 8+ · MariaDB · Vanilla JS · Sin dependencias externas</span>
+</footer>
+
+<script>
+function copyCode(btn) {
+  const pre  = btn.parentElement;
+  const text = pre.innerText.replace('Copiar', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => btn.textContent = 'Copiar', 2000);
+  });
+}
+</script>
+</body>
+</html>

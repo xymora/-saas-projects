@@ -1,2 +1,2 @@
-# -saas-projects
-Open-source billing and business SaaS systems, free to use and deploy
+# boutique
+Sistema de gestión de cobros e inventario para boutique. Permite registrar ventas, controlar stock de productos y administrar el flujo de caja del negocio.
